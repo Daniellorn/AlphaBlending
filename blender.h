@@ -3,6 +3,7 @@
 
 #include <QImage>
 
+
 struct PixelColor
 {
     // tu pewnie uint8 powinien byc
@@ -28,7 +29,6 @@ struct PixelColor
         };
     }
 
-
     PixelColor operator+(const PixelColor& other) const
     {
         return PixelColor{
@@ -46,6 +46,15 @@ struct PixelColor
             std::max(0, (B - other.B))
         };
     }
+
+    PixelColor operator-(int value) const
+    {
+        return PixelColor{
+            std::max(0, (value - R)),
+            std::max(0, (value - G)),
+            std::max(0, (value - B))
+        };
+    }
 };
 
 
@@ -54,24 +63,28 @@ class Blender
 public:
     Blender();
 
-    void blend(QImage& background, const QImage& foreground, float alpha, int mode);
+    void blend(QImage& background, const QImage& foreground, float alpha, const std::string& mode);
 
 private:
 
-    PixelColor normal(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor multiply(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor screen(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor overlay(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor darken(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor lighten(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor difference(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
-    PixelColor additive(PixelColor& backgroundPixel,PixelColor& foregroundPixel);
+    using functions = std::function<PixelColor(const PixelColor&, const PixelColor&)>;
+
+    PixelColor normal(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor multiply(const PixelColor& backgroundPixel,const PixelColor& foregroundPixel);
+    PixelColor screen(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor overlay(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor darken(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor lighten(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor difference(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
+    PixelColor additive(const PixelColor& backgroundPixel, const PixelColor& foregroundPixel);
 
 
-    PixelColor getPixel(const QImage& img, int x, int y);
+    PixelColor getPixel(const QImage& img, int x, int y) const;
     void setPixel(QImage& img, int x, int y, const PixelColor& color);
-    // Tu funkcje blendujace z moze jakas mapa<int, std::function>
 
+private:
+
+    std::unordered_map<std::string, functions> m_mode;
 };
 
 #endif // BLENDER_H
