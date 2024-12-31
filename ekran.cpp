@@ -18,19 +18,6 @@ Ekran::Ekran(QWidget *parent)
     loadArray();
 }
 
-Ekran::~Ekran()
-{
-    m_mainLayout = nullptr;
-    m_leftPanel = nullptr;
-    m_rightPanel = nullptr;
-    m_rightLayout = nullptr;
-    m_combobox = nullptr;
-    m_slider = nullptr;
-    m_alphaLabel = nullptr;
-    m_listWidget = nullptr;
-    m_spacer = nullptr;
-}
-
 int Ekran::getValue() const
 {
     return m_slider->value();

@@ -29,7 +29,7 @@ class Ekran : public QWidget
     Q_OBJECT
 public:
     explicit Ekran(QWidget *parent = nullptr);
-    ~Ekran();
+    //~Ekran();
 
     int getValue() const;
 
